@@ -27,5 +27,19 @@ class interviewQuestionsTests {
  *  b => 1		
  */
 	}
+	@Test
+	void isSum2Test() {
+		int [] array = {10,2,40,-30};
+		assertTrue(isSum2(array, 30));
+		assertFalse(isSum2(array,32));
+	}
+	
+	@Test
+	void maxPositiveWithNagativeTest {
+		int [] array1 = {-200, 10, -10, 1,2,3};
+		int[] array2 = {-200, -200, 100, 10, 10	};
+		assertEquals(200, getMax....(array1));
+		assertEquals(-1, getMax...(array2));
+		
 
 }

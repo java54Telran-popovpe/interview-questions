@@ -31,5 +31,17 @@ public class InterviewQuestions {
 		}
 		return result;
 	}
+	//hashset
+	static public boolean isSum2(int[] array, int sum) {
+		//TODO true if exist two element of sum 
+		return false;
+	}
+	static public int getMaxWithNegativePresentation(int [] array) {
+		//TODO
+		//returns maximal positive value for whitch exists negative value with the same abs value
+		//if no pair positive and negative returns -1
+		return -1;
+		
+	}
 
 }
