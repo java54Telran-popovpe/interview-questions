@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class LinkedHashMapTest {
 	LinkedHashMap<Integer,Integer> map;
+	@SuppressWarnings("serial")
 	@BeforeEach
 	void setUp() {
 		map = new

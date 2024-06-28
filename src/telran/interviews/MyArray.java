@@ -27,12 +27,18 @@ public class MyArray<T> {
 	
 	public T get(int index) {
 		checkIndex(index);
-		return map.getOrDefault(map, defaultValue);
+		return map.getOrDefault(index, defaultValue);
 	}
-	public MyArray( int size ) {
+	
+	@SuppressWarnings("rawtypes")
+	public static MyArray create( int size ) {
 		if( size < 0 )
 			throw new IllegalArgumentException();
+		return new MyArray( size );
+	}
+	
+	private MyArray( int size ) {
 		map = new HashMap<Integer, T>();
-		
+		this.size = size;
 	}
 }

@@ -34,13 +34,28 @@ public class InterviewQuestions {
 	//hashset
 	static public boolean isSum2(int[] array, int sum) {
 		//TODO true if exist two element of sum 
-		return false;
+		HashSet<Integer> hashSet = new HashSet<>();
+		int i = 0;
+		while( i < array.length && !hashSet.contains(array[i])) {
+			hashSet.add(sum - array[i]);
+			i++;
+		}
+		return i == array.length ? false : true;
 	}
 	static public int getMaxWithNegativePresentation(int [] array) {
 		//TODO
 		//returns maximal positive value for whitch exists negative value with the same abs value
 		//if no pair positive and negative returns -1
-		return -1;
+		HashSet<Integer> hashSet = new HashSet<>();
+		int result = -1;
+		for (int i = 0; i < array.length; i++ ) {
+			if ( hashSet.contains( -array[i])) {
+				result = Math.max(result, Math.abs(array[i]));
+			} else {
+				hashSet.add(array[i]);
+			}
+		}
+		return result;
 		
 	}
 
