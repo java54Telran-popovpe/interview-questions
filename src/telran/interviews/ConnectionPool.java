@@ -16,7 +16,7 @@ public class ConnectionPool {
 			map = new LinkedHashMap<>(16, 0.75f, true ) {
 				@Override
 				protected boolean removeEldestEntry(Map.Entry<Long, Connection> entry) {
-					return size() > ConnectionPool.this.size;
+					return size() > ConnectionPool.this.size;	
 				}
 			};
 		}
