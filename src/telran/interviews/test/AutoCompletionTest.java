@@ -2,6 +2,8 @@ package telran.interviews.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 
 import telran.interviews.AutoCompletion;
