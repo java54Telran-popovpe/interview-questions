@@ -1,23 +1,25 @@
 package telran.interviews;
 
 import java.util.LinkedList;
+import java.util.Optional;
 
 //time complexity O[1]
 public class MyStackInt {
-	private record StackElement(int value, int maxValue, int prevMaxValue) {
+	private record StackElement(int value, Optional<Integer> prevMaxValue) {
 		
 	}
 	LinkedList<StackElement> stack = new LinkedList<>();
-	int prevMaxElement = Integer.MIN_VALUE;
+	Optional<Integer> currentMaxValue = Optional.empty();
 	public void push( int num ) {
-		int newMAxValue = Math.max(prevMaxElement, num);
-		stack.add(new StackElement(num, newMAxValue, prevMaxElement));
-		prevMaxElement = newMAxValue;
+		stack.add(new StackElement(num, currentMaxValue));
+		int newMAxValue = Math.max(currentMaxValue.orElse(Integer.MIN_VALUE), num);
+		currentMaxValue = Optional.of(newMAxValue);
+		
 	}
 	
 	public int pop() {
 		StackElement poppedElement = stack.removeLast();
-		prevMaxElement = poppedElement.prevMaxValue;
+		currentMaxValue = poppedElement.prevMaxValue;
 		return poppedElement.value;
 	}
 	
@@ -30,6 +32,6 @@ public class MyStackInt {
 	}
 	
 	public int getMaxElement() {
-		return stack.getLast().maxValue;
+		return currentMaxValue.orElseThrow();
 	}
 }
