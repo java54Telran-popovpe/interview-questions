@@ -80,7 +80,7 @@ public class InterviewQuestions {
 		//O[n] sorting is disallowed
 		//case sensitive
 		boolean result = false;
-		HashMap<Integer,LinkedList<Integer>> wordChars;
+		HashMap<Character,LinkedList<Integer>> wordChars;
 		int wordLength = word.length();
 		if (wordLength == anagram.length()) {
 			wordChars = putStringToCollection(word,wordLength);
@@ -89,13 +89,13 @@ public class InterviewQuestions {
 		return result;
 	}
 
-	private static boolean applayStringOnCollection(HashMap<Integer, LinkedList<Integer>> wordChars, String anagram) {
+	private static boolean applayStringOnCollection(HashMap<Character, LinkedList<Integer>> wordChars, String anagram) {
 		boolean stringEquals = true;
 		boolean charNotFound = false;
 		int index = 0;
 		int length = anagram.length();
 		while( index < length && !charNotFound) {
-			Optional<Integer> charIndex = getCharIndex(wordChars, anagram.codePointAt(index));
+			Optional<Integer> charIndex = getCharIndex(wordChars, anagram.charAt(index));
 			charNotFound = charIndex.isEmpty();
 			if (!charNotFound && stringEquals) {
 				stringEquals = ( index == charIndex.get() );
@@ -104,27 +104,27 @@ public class InterviewQuestions {
 		}
 		return !charNotFound && !stringEquals;
 	}
-	private static Optional<Integer> getCharIndex(HashMap<Integer, LinkedList<Integer>> wordChars, int codePoint) {
+	private static Optional<Integer> getCharIndex(HashMap<Character, LinkedList<Integer>> wordChars, Character charToSearch) {
 		Optional<Integer> result = Optional.empty();
-		LinkedList<Integer> indexes = wordChars.get(codePoint);
+		LinkedList<Integer> indexes = wordChars.get(charToSearch);
 		if ( indexes != null ) {
 			result = Optional.ofNullable(indexes.pollFirst());
 		}
 		return result;
 	}
 	
-	private static HashMap<Integer, LinkedList<Integer>> putStringToCollection(String word, int wordLength) {
+	private static HashMap<Character, LinkedList<Integer>> putStringToCollection(String word, int wordLength) {
 //		Implementation using streams.		
-//		int[] codePoints = word.chars().toArray();
-//		return  IntStream.range(0, codePoints.length).mapToObj( c -> Integer.valueOf(c))
-//			.collect(Collectors.groupingBy(i -> Integer.valueOf(codePoints[i]), HashMap::new, Collectors.toCollection(LinkedList::new)));
+		char[] chars = word.toCharArray();
+		return  IntStream.range(0, chars.length).mapToObj( c -> Integer.valueOf(c))
+			.collect(Collectors.groupingBy(i -> Character.valueOf(chars[i]), HashMap::new, Collectors.toCollection(LinkedList::new)));
 		
-		HashMap<Integer,LinkedList<Integer>> wordChars = new HashMap<>();
-		for( int i = 0; i < wordLength; i++ ) {
-			Integer charCodePoint = word.codePointAt(i);
-			wordChars.computeIfAbsent(charCodePoint, k -> new LinkedList<Integer>()).add(i);
-		}
-		return wordChars;
+//		HashMap<Character,LinkedList<Integer>> wordChars = new HashMap<>();
+//		for( int i = 0; i < wordLength; i++ ) {
+//			Character charCodePoint = word.charAt(i);
+//			wordChars.computeIfAbsent(charCodePoint, k -> new LinkedList<Integer>()).add(i);
+//		}
+//		return wordChars;
 	}
 	
 	
