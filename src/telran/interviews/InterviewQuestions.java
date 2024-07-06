@@ -1,5 +1,10 @@
 package telran.interviews;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class InterviewQuestions {
 	public static void displayOccurences(String[] strings) {
@@ -7,7 +12,12 @@ public class InterviewQuestions {
 		TreeMap<Integer,TreeSet<String>> treeMapOccurences = getTreeMapOccurences(mapOccurences);
 		displayOccurences(treeMapOccurences);
 	}
-
+	public static void displayOccurencesStream(String[] strings) {
+		Arrays.stream(strings).collect(Collectors.groupingBy(s -> s, Collectors.counting())).entrySet().stream().sorted((e1, e2) -> {
+			int res = Long.compare(e2.getValue(), e1.getValue());
+			return res == 0 ? e1.getKey().compareTo(e2.getKey()) : res;
+		}).forEachOrdered(e -> System.out.printf("%s -> %d\n", e.getKey(), e.getValue()));
+	}
 	private static void displayOccurences(TreeMap<Integer, TreeSet<String>> treeMapOccurences) {
 		treeMapOccurences.entrySet().forEach( e -> {
 			e.getValue().forEach(str -> System.out.printf("%s => %d\n", str, e.getKey() ));
@@ -57,6 +67,102 @@ public class InterviewQuestions {
 		}
 		return result;
 		
+	}
+	
+	public static Map<Integer, Integer> getMapSquares(List<Integer> numbers) {
+		Map<Integer,Integer> res = numbers.stream().collect(Collectors.toMap(Function.identity(), n -> n * n, (v1, v2) -> v1, LinkedHashMap::new));
+		return res;
+	}
+	
+	public static boolean isAnagram(String word, String anagram) {
+		//TODO
+		//returns true if "anagram" string conains all letters from "word" in another order
+		//O[n] sorting is disallowed
+		//case sensitive
+		boolean result = false;
+		HashMap<Integer,LinkedList<Integer>> wordChars;
+		int wordLength = word.length();
+		if (wordLength == anagram.length()) {
+			wordChars = putStringToCollection(word,wordLength);
+			result = applayStringOnCollection(wordChars, anagram);
+		}
+		return result;
+	}
+
+	private static boolean applayStringOnCollection(HashMap<Integer, LinkedList<Integer>> wordChars, String anagram) {
+		boolean stringEquals = true;
+		boolean charNotFound = false;
+		int index = 0;
+		int length = anagram.length();
+		while( index < length && !charNotFound) {
+			Optional<Integer> charIndex = getCharIndex(wordChars, anagram.codePointAt(index));
+			charNotFound = charIndex.isEmpty();
+			if (!charNotFound && stringEquals) {
+				stringEquals = ( index == charIndex.get() );
+			}
+			index++;
+		}
+		return !charNotFound && !stringEquals;
+	}
+	private static Optional<Integer> getCharIndex(HashMap<Integer, LinkedList<Integer>> wordChars, int codePoint) {
+		Optional<Integer> result = Optional.empty();
+		LinkedList<Integer> indexes = wordChars.get(codePoint);
+		if ( indexes != null ) {
+			result = Optional.ofNullable(indexes.pollFirst());
+		}
+		return result;
+	}
+	
+	private static HashMap<Integer, LinkedList<Integer>> putStringToCollection(String word, int wordLength) {
+//		Implementation using streams.		
+//		int[] codePoints = word.chars().toArray();
+//		return  IntStream.range(0, codePoints.length).mapToObj( c -> Integer.valueOf(c))
+//			.collect(Collectors.groupingBy(i -> Integer.valueOf(codePoints[i]), HashMap::new, Collectors.toCollection(LinkedList::new)));
+		
+		HashMap<Integer,LinkedList<Integer>> wordChars = new HashMap<>();
+		for( int i = 0; i < wordLength; i++ ) {
+			Integer charCodePoint = word.codePointAt(i);
+			wordChars.computeIfAbsent(charCodePoint, k -> new LinkedList<Integer>()).add(i);
+		}
+		return wordChars;
+	}
+	
+	
+	public static List<DateRole> assignRolesDates(List<DateRole> rolesHistory, List<LocalDate> dates) {
+		//TODO
+		//create List<DateRole> with roles matching with given dates
+		//most effective data structure
+		TreeMap<LocalDate,String> rolesHistoryMap = 
+				rolesHistory.stream().collect(Collectors.toMap(	r -> r.date(),
+																r -> r.role(), 
+																(v1, v2 ) -> v1,
+																TreeMap::new));
+		return dates.stream().map( d -> {
+			Map.Entry<LocalDate,String> entry= rolesHistoryMap.floorEntry(d);
+			return new DateRole(d, entry != null ? entry.getValue() : null);
+		}).toList();
+	}
+	public static void displayDigitsStatistics() {
+		//TODO
+		//display out statistics in the following format (example)
+		/* 1 -> <count of occurrences>
+		 * 2 -> .....
+		 * .........
+		 */
+		//sorted by counts of occurrences in the descending order
+		//takes 1000000 random numbers in range [0-Integer.MAX_VALUE)
+		//one pipeline with no additional yours methods
+		new Random().ints(0, Integer.MAX_VALUE)
+				.limit(1000000)
+				.flatMap(n -> String.valueOf(n).chars())
+				.mapToObj( n -> Integer.valueOf(n))
+				.collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()))
+				.entrySet()
+				.stream()
+				.forEachOrdered( entry -> System.out.printf("%s -> %d\n", 
+															String.valueOf(Character.toChars(entry.getKey())), 
+															entry.getValue()
+															));
 	}
 
 }
