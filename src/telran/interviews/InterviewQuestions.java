@@ -74,6 +74,15 @@ public class InterviewQuestions {
 		return res;
 	}
 	
+	public static boolean isAnagramStream(String word, String anagram) {
+		boolean result = false;
+		if ( word.length() == anagram.length() && !word.equals(anagram)) {
+			HashMap<Integer,Long> helperMap = word.chars().boxed().collect(Collectors.groupingBy(Function.identity(), HashMap::new, Collectors.counting()));
+			result =  anagram.chars().boxed().allMatch( cp ->  helperMap.computeIfPresent(cp, ( k, v ) -> v == 0 ? null : --v ) != null );
+		}
+		return result;
+	}
+	
 	//This implementation does not use compareTo method for strings
 	public static boolean isAnagram(String word, String anagram) {
 		//TODO
