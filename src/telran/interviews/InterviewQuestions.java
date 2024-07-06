@@ -74,6 +74,7 @@ public class InterviewQuestions {
 		return res;
 	}
 	
+	//This implementation does not use compareTo method for strings
 	public static boolean isAnagram(String word, String anagram) {
 		//TODO
 		//returns true if "anagram" string conains all letters from "word" in another order
@@ -115,16 +116,16 @@ public class InterviewQuestions {
 	
 	private static HashMap<Character, LinkedList<Integer>> putStringToCollection(String word, int wordLength) {
 //		Implementation using streams.		
-		char[] chars = word.toCharArray();
-		return  IntStream.range(0, chars.length).mapToObj( c -> Integer.valueOf(c))
-			.collect(Collectors.groupingBy(i -> Character.valueOf(chars[i]), HashMap::new, Collectors.toCollection(LinkedList::new)));
+//		char[] chars = word.toCharArray();
+//		return  IntStream.range(0, chars.length).mapToObj( c -> Integer.valueOf(c))
+//			.collect(Collectors.groupingBy(i -> Character.valueOf(chars[i]), HashMap::new, Collectors.toCollection(LinkedList::new)));
 		
-//		HashMap<Character,LinkedList<Integer>> wordChars = new HashMap<>();
-//		for( int i = 0; i < wordLength; i++ ) {
-//			Character charCodePoint = word.charAt(i);
-//			wordChars.computeIfAbsent(charCodePoint, k -> new LinkedList<Integer>()).add(i);
-//		}
-//		return wordChars;
+		HashMap<Character,LinkedList<Integer>> wordChars = new HashMap<>();
+		for( int i = 0; i < wordLength; i++ ) {
+			Character charToAdd = word.charAt(i);
+			wordChars.computeIfAbsent(charToAdd, k -> new LinkedList<Integer>()).add(i);
+		}
+		return wordChars;
 	}
 	
 	
