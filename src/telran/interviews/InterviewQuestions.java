@@ -166,9 +166,10 @@ public class InterviewQuestions {
 				.limit(1000000)
 				.flatMap(n -> String.valueOf(n).chars())
 				.mapToObj( n -> Integer.valueOf(n))
-				.collect(Collectors.groupingBy(Function.identity(), () -> new TreeMap<>(Comparator.reverseOrder()), Collectors.counting()))
+				.collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()))
 				.entrySet()
 				.stream()
+				.sorted((a,b)-> b.getValue().compareTo(a.getValue()))
 				.forEachOrdered( entry -> System.out.printf("%s -> %d\n", 
 															String.valueOf(Character.toChars(entry.getKey())), 
 															entry.getValue()
